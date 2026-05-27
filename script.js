@@ -216,7 +216,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 7. Dynamic Project Cards Filtering
     const filterButtons = document.querySelectorAll('.filter-btn');
-    const projectCards = document.querySelectorAll('.project-card');
 
     filterButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -225,6 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
             button.classList.add('active');
 
             const filterValue = button.getAttribute('data-filter');
+            const projectCards = document.querySelectorAll('.project-card');
 
             projectCards.forEach(card => {
                 const category = card.getAttribute('data-category');
@@ -238,39 +238,134 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 8. Project Details Data Map
-    const projectsData = {
-        1: {
-            category: 'Android App',
-            title: 'AuraFit - AI Workout Companion',
-            img: 'assets/aurafit.png',
-            desc: 'AuraFit is a premium native Android app that implements real-time visual pose tracking using TensorFlow Lite models. Built entirely in Kotlin with Jetpack Compose, the app empowers users to monitor their posture during workouts, access dynamic personalized training schedules, and sync data offline with a highly responsive Room database system, while ensuring secure cloud backups.',
-            accomplishments: [
-                'Integrated TensorFlow Lite models locally, lowering body pose estimation latency to <15ms.',
-                'Designed custom fluid UI animations with Jetpack Compose, elevating App Store metrics.',
-                'Formulated offline-first caching mechanism using SQLite/Room for seamless operation in areas of low connectivity.'
-            ],
-            tags: ['Kotlin', 'Jetpack Compose', 'TensorFlow Lite', 'Room DB', 'Coroutines', 'Hilt'],
-            testimonial: 'The AuraFit app is incredibly polished. The Jetpack Compose UI flows naturally and the TensorFlow pose tracking operates locally and efficiently. Alex is an elite Android developer.',
-            author: 'Sarah Jenkins, Product Lead at FitTech Systems',
-            link: 'https://github.com/alexcarter/aurafit-android'
-        },
-        2: {
-            category: 'Website Development',
-title: 'SOMSAVI Agro Industries LLP',
-img: 'assets/somsavi.png',
-desc: 'SOMSAVI is a responsive static product showcase and digital storefront designed to display premium agricultural produce and spice offerings. Powered by React.js, the platform delivers an intuitive, high-performance catalog interface for exploring spices, cereals, pulses, and dry fruits. It features an integrated WhatsApp redirection flow that seamlessly translates product interest into instant consumer inquiries and direct orders, deployed via Vercel for maximum availability.',
-accomplishments: [
-    'Engineered a highly responsive, modern static catalog architecture using React.js for agricultural produce showcasing.',
-    'Implemented clean WhatsApp API redirection routing to streamline client inquiries and order placement pipelines.',
-    'Optimized the deployment build for Vercel, ensuring fast initial page loads, smooth navigation, and a lightweight footprint.'
-],
-tags: ['React.js', 'Vercel', 'WhatsApp API', 'JavaScript', 'Web Development', 'UI/UX Design'],
-testimonial: 'The SOMSAVI platform completely modernized how we present our agricultural produce. The clean layout makes browsing our spice and cereal catalogs effortless, and the direct WhatsApp integration has significantly streamlined our client inquiry process!',
-author: 'Founder, SOMSAVI Agro & Spices',
-link: 'https://somsavi.vercel.app/'
+    // 8. Project Details Data Map & Dynamic Loading
+    let projectsData = {};
+
+    const loadProjects = async () => {
+        const grid = document.getElementById('projects-grid');
+        if (!grid) return;
+
+        grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px; font-size: 1.1rem; letter-spacing: 0.5px;">Loading dynamic portfolio...</div>';
+
+        try {
+            let response;
+            try {
+                // Try local dev server endpoint first
+                response = await fetch('/api/projects');
+                if (!response.ok) throw new Error('API server status check failed');
+            } catch (err) {
+                console.log('[Portfolio] Dev server API not available, loading from local projects.json file instead.');
+                response = await fetch('projects.json');
+            }
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch projects.');
+            }
+
+            const projects = await response.json();
+            
+            // Populate projectsData object map for popup modals
+            projectsData = {};
+            projects.forEach(project => {
+                projectsData[project.id] = project;
+            });
+
+            // Clear loader
+            grid.innerHTML = '';
+
+            if (projects.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px;">No projects found. Add some from the Admin Console!</div>';
+                return;
+            }
+
+            // Render project cards
+            projects.forEach(project => {
+                const card = document.createElement('div');
+                
+                // Map the human category name to our data-filter class values: android, web, video
+                let dataCategory = 'web';
+                const lowerCat = project.category.toLowerCase();
+                if (lowerCat.includes('android')) {
+                    dataCategory = 'android';
+                } else if (lowerCat.includes('video') || lowerCat.includes('edit') || lowerCat.includes('motion')) {
+                    dataCategory = 'video';
+                } else if (lowerCat.includes('web') || lowerCat.includes('site') || lowerCat.includes('saps') || lowerCat.includes('front')) {
+                    dataCategory = 'web';
+                }
+
+                card.className = `project-card scroll-reveal${project.comingSoon ? ' coming-soon' : ''}`;
+                card.setAttribute('data-category', dataCategory);
+                card.setAttribute('data-id', project.id);
+
+                let mediaHtml = '';
+                if (project.comingSoon) {
+                    mediaHtml = `
+                        <div class="project-media-wrapper">
+                            <img src="${project.img}" alt="${project.title}" class="project-img" onerror="this.src='assets/video-editing.png'">
+                            <div class="coming-soon-overlay">
+                                <span class="coming-soon-badge-center">Coming Soon</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    mediaHtml = `
+                        <div class="project-media-wrapper">
+                            <img src="${project.img}" alt="${project.title}" class="project-img" onerror="this.src='assets/somsavi.png'">
+                            <div class="project-overlay">
+                                <span class="btn-project-view">View Case Study <i data-lucide="eye"></i></span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                const tagsHtml = project.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+
+                card.innerHTML = `
+                    ${mediaHtml}
+                    <div class="project-info">
+                        <span class="project-category-tag">${project.category}</span>
+                        <h3 class="project-title">${project.title}</h3>
+                        <p class="project-summary">${project.summary}</p>
+                        <div class="project-tags">
+                            ${tagsHtml}
+                        </div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+
+            // Initialize Lucide Icons for dynamic content
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+
+            // Register newly added cards with scroll reveal intersection observer
+            if (typeof revealObserver !== 'undefined') {
+                const revealElements = grid.querySelectorAll('.scroll-reveal');
+                revealElements.forEach(el => revealObserver.observe(el));
+            }
+
+            // Trigger mousemove card highlight effects on newly generated cards
+            const newCards = grid.querySelectorAll('.project-card');
+            newCards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+
+        } catch (error) {
+            console.error('[Portfolio] Error rendering projects portfolio:', error);
+            grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--accent); padding: 40px;">Failed to load project database. Please try refreshing.</div>';
         }
     };
+
+    // Load projects asynchronously
+    loadProjects();
 
     // 9. Glassmorphic Project Modal Controller
     const modal = document.getElementById('project-modal');
@@ -297,27 +392,50 @@ link: 'https://somsavi.vercel.app/'
         modalTitle.textContent = data.title;
         modalImg.src = data.img;
         modalImg.alt = data.title;
+        modalImg.onerror = function() { this.src = 'assets/somsavi.png'; };
         modalDesc.textContent = data.desc;
-        modalTestimonial.textContent = `"${data.testimonial}"`;
-        modalAuthor.textContent = `- ${data.author}`;
-        modalLink.href = data.link;
+        modalTestimonial.textContent = data.testimonial ? `"${data.testimonial}"` : '';
+        modalAuthor.textContent = data.author ? `- ${data.author}` : '';
+        
+        // Hide testimonial sub-section if not filled
+        const testimonialParent = modalTestimonial.parentElement;
+        if (testimonialParent && testimonialParent.classList.contains('modal-testimonial')) {
+            if (!data.testimonial) {
+                testimonialParent.style.display = 'none';
+            } else {
+                testimonialParent.style.display = 'block';
+            }
+        }
+
+        modalLink.href = data.link || '#';
+        if (!data.link || data.link === '#') {
+            modalLink.style.display = 'none';
+        } else {
+            modalLink.style.display = 'block';
+        }
 
         // Populate accomplishments list
         modalAccompList.innerHTML = '';
-        data.accomplishments.forEach(acc => {
-            const li = document.createElement('li');
-            li.textContent = acc;
-            modalAccompList.appendChild(li);
-        });
+        if (Array.isArray(data.accomplishments) && data.accomplishments.length > 0) {
+            data.accomplishments.forEach(acc => {
+                if (acc && acc.trim() !== '') {
+                    const li = document.createElement('li');
+                    li.textContent = acc;
+                    modalAccompList.appendChild(li);
+                }
+            });
+        }
 
         // Populate tech tags
         modalTags.innerHTML = '';
-        data.tags.forEach(tag => {
-            const span = document.createElement('span');
-            span.className = 'tag';
-            span.textContent = tag;
-            modalTags.appendChild(span);
-        });
+        if (Array.isArray(data.tags)) {
+            data.tags.forEach(tag => {
+                const span = document.createElement('span');
+                span.className = 'tag';
+                span.textContent = tag;
+                modalTags.appendChild(span);
+            });
+        }
 
         // Activate Modal
         modal.classList.add('active');
@@ -331,14 +449,17 @@ link: 'https://somsavi.vercel.app/'
         document.body.style.overflow = ''; // Unlock scroll
     };
 
-    // Attach click events to project cards
-    projectCards.forEach(card => {
-        card.addEventListener('click', () => {
+    // Attach click events to project cards using event delegation on projects-grid container
+    const projectsGrid = document.getElementById('projects-grid');
+    if (projectsGrid) {
+        projectsGrid.addEventListener('click', (e) => {
+            const card = e.target.closest('.project-card');
+            if (!card) return;
             if (card.classList.contains('coming-soon')) return; // Disable modal for coming soon
             const id = card.getAttribute('data-id');
             openModal(id);
         });
-    });
+    }
 
     if (modalClose) modalClose.addEventListener('click', closeModal);
     if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);

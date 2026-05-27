@@ -1,0 +1,98 @@
+[
+  {
+    "id": "2",
+    "category": "Website Development",
+    "title": "Somsavi Agro Industries LLP",
+    "img": "assets/somsavi.png",
+    "summary": "A website for selling authentic home made spices.",
+    "desc": "SOMSAVI is a responsive static product showcase and digital storefront designed to display premium agricultural produce and spice offerings. Powered by React.js, the platform delivers an intuitive, high-performance catalog interface for exploring spices, cereals, pulses, and dry fruits. It features an integrated WhatsApp redirection flow that seamlessly translates product interest into instant consumer inquiries and direct orders, deployed via Vercel for maximum availability.",
+    "accomplishments": [
+      "Engineered a highly responsive, modern static catalog architecture using React.js for agricultural produce showcasing.",
+      "Implemented clean WhatsApp API redirection routing to streamline client inquiries and order placement pipelines.",
+      "Optimized the deployment build for Vercel, ensuring fast initial page loads, smooth navigation, and a lightweight footprint."
+    ],
+    "tags": [
+      "React.js",
+      "Vercel",
+      "WhatsApp API",
+      "JavaScript",
+      "Web Development",
+      "UI/UX Design"
+    ],
+    "testimonial": "The SOMSAVI platform completely modernized how we present our agricultural produce. The clean layout makes browsing our spice and cereal catalogs effortless, and the direct WhatsApp integration has significantly streamlined our client inquiry process!",
+    "author": "Founder, SOMSAVI Agro & Spices",
+    "link": "https://somsavi.vercel.app/",
+    "comingSoon": false
+  },
+  {
+    "id": "4",
+    "category": "Android App",
+    "title": "Unofficial Mech",
+    "img": "https://play-lh.googleusercontent.com/910ikobveWOwcvvv-RH4Rjrp4chu5bycE__LF8fSfqOjcLkYD2jdibfmR-yUk9In_2c=w480-h960-rw",
+    "summary": "Developed an Independent Android app as my hobby",
+    "desc": "Developed a Independent Android App for storing college memories, staying in touch with other members and much more.\n\nNote: This app may be unstable.",
+    "accomplishments": [
+      "Independent Android App",
+      "Smooth flow and better user experience"
+    ],
+    "tags": [
+      "Android",
+      "Java",
+      "Firebase",
+      "GitHub",
+      "Picasso",
+      "Realtime Database"
+    ],
+    "testimonial": "Nice work",
+    "author": "Student",
+    "link": "https://play.google.com/store/apps/details?id=com.rubyproducti9n.unofficialmech",
+    "comingSoon": false
+  },
+  {
+    "id": "1",
+    "category": "Android App",
+    "title": "Demo Android App",
+    "img": "assets/aurafit.png",
+    "summary": "A simple demo of how your android app will look and feel and how it will work",
+    "desc": "(Empty)",
+    "accomplishments": [
+      "Integrated TensorFlow Lite models locally, lowering body pose estimation latency to <15ms.",
+      "Designed custom fluid UI animations with Jetpack Compose, elevating App Store metrics.",
+      "Formulated offline-first caching mechanism using SQLite/Room for seamless operation in areas of low connectivity."
+    ],
+    "tags": [
+      "Kotlin",
+      "Jetpack Compose",
+      "Carousel",
+      "Thread Management",
+      "MDC"
+    ],
+    "testimonial": "The AuraFit app is incredibly polished. The Jetpack Compose UI flows naturally and the TensorFlow pose tracking operates locally and efficiently. Alex is an elite Android developer.",
+    "author": "Sarah Jenkins, Product Lead at FitTech Systems",
+    "link": "https://github.com/alexcarter/aurafit-android",
+    "comingSoon": true
+  },
+  {
+    "id": "3",
+    "category": "Video Editing",
+    "title": "Video Edits",
+    "img": "assets/video-editing.png",
+    "summary": "A showcase of cinematic video edits, promotional clips, and high-impact motion graphics.",
+    "desc": "A showcase of cinematic video edits, promotional clips, and high-impact motion graphics for platforms like YouTube, Instagram Reels, and corporate portfolios.",
+    "accomplishments": [
+      "Edited high-impact social media videos, YouTube series, and corporate reels.",
+      "Used Premiere Pro, After Effects, and DaVinci Resolve to deliver slick transitions, VFX, and audio design.",
+      "Optimized export formats for high quality and smooth online streaming."
+    ],
+    "tags": [
+      "Premiere Pro",
+      "After Effects",
+      "Color Grading",
+      "Sound Design"
+    ],
+    "testimonial": "The video editing is top-notch, highly creative transitions and timing are absolutely perfect.",
+    "author": "Client",
+    "link": "#",
+    "comingSoon": true
+  }
+]
