@@ -122,6 +122,8 @@ ul {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 24px;
+    position: relative;
+    z-index: 2;
 }
 
 .section-padding {
@@ -439,6 +441,7 @@ ul {
     grid-template-columns: 1.2fr 0.8fr;
     align-items: center;
     gap: 60px;
+    opacity: 1;
 }
 
 .hero-content {
@@ -695,7 +698,7 @@ ul {
 /* Services Section Styling */
 .services-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
     gap: 32px;
 }
 
@@ -792,12 +795,8 @@ ul {
 .bullet-icon {
     width: 14px;
     height: 14px;
-    color: var(--secondary);
+    color: var(--primary);
 }
-
-.service-card:nth-child(1) .bullet-icon { color: var(--primary); }
-.service-card:nth-child(3) .bullet-icon { color: var(--accent); }
-.service-card:nth-child(4) .bullet-icon { color: #10b981; }
 
 /* Skills Section Design */
 .skills-tabs-container {
@@ -946,7 +945,7 @@ ul {
 
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
     gap: 32px;
     transition: all 0.5s ease;
 }
@@ -1366,49 +1365,70 @@ ul {
 /* Contact Form UI */
 .contact-form-panel {
     position: relative;
+    opacity: 0.1;
 }
 
-/* Google Form Embedded Integration */
-.google-form-wrapper {
-    background-color: var(--bg-card);
+/* Background floating & rotating 4-sided cookie shape */
+.form-bg-shape {
+    position: absolute;
+    top: -60px;
+    right: -60px;
+    width: 320px;
+    height: 320px;
+    z-index: 1;
+    pointer-events: none;
+    animation: cookieFloat 14s ease-in-out infinite alternate;
+}
+
+.form-bg-shape-rotator {
+    width: 100%;
+    height: 100%;
+    animation: cookieRotate 24s linear infinite;
+    transform-origin: center center;
+}
+
+.form-bg-shape-rotator svg {
+    width: 100%;
+    height: 100%;
+    fill: url(#cookie-gradient);
+    opacity: 0.22; /* Increased visibility under glass container */
+    filter: drop-shadow(0 0 25px rgba(173, 198, 255, 0.2));
+}
+
+@keyframes cookieRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes cookieFloat {
+    0% {
+        transform: translate(0, 0);
+    }
+    50% {
+        transform: translate(-40px, 30px);
+    }
+    100% {
+        transform: translate(15px, -15px);
+    }
+}
+
+/* Custom Contact Form Container */
+.contact-form-container {
+    background-color: rgba(26, 27, 32, 0.65);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--border-glass);
     border-radius: var(--border-radius-md);
-    padding: 16px;
+    padding: 32px;
     box-shadow: var(--shadow-premium);
-    overflow: hidden;
     position: relative;
     width: 100%;
-}
-
-.google-form-iframe {
-    width: 100%;
-    height: 600px;
-    border: none;
-    border-radius: var(--border-radius-sm);
-    display: block;
-    background-color: transparent;
-}
-
-.google-form-fallback {
-    margin-top: 16px;
-    text-align: center;
-}
-
-.google-form-fallback-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-heading);
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--secondary);
-    transition: var(--transition-fast);
-}
-
-.google-form-fallback-link:hover {
-    color: #fff;
-    text-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
-    transform: translateY(-1px);
+    overflow: hidden;
+    z-index: 2;
 }
 
 .contact-form {
@@ -1423,6 +1443,14 @@ ul {
     gap: 24px;
 }
 
+/* Responsive row for small viewports */
+@media (max-width: 600px) {
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+}
+
 .form-group {
     position: relative;
     width: 100%;
@@ -1430,8 +1458,8 @@ ul {
 
 .form-input {
     width: 100%;
-    background-color: rgba(255, 255, 255, 0.02);
-    border: 1px solid var(--border-glass);
+    background-color: #131418;
+    border: 1px solid var(--text-dimmed);
     border-radius: var(--border-radius-sm);
     padding: 14px 18px;
     color: #fff;
@@ -1443,8 +1471,8 @@ ul {
 
 .form-input:focus {
     border-color: var(--primary);
-    background-color: rgba(139, 92, 246, 0.02);
-    box-shadow: 0 0 15px rgba(139, 92, 246, 0.1);
+    background-color: rgba(173, 198, 255, 0.02);
+    box-shadow: 0 0 15px rgba(173, 198, 255, 0.1);
 }
 
 textarea.form-input {
@@ -1476,7 +1504,7 @@ textarea ~ .form-label {
     font-size: 0.75rem;
     font-weight: 600;
     color: var(--primary);
-    background-color: var(--bg-surface);
+    background-color: #1a1b20;
     padding: 0 8px;
 }
 
@@ -1485,6 +1513,16 @@ textarea ~ .form-label {
     cursor: pointer;
     appearance: none;
     -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2374777f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    background-size: 16px;
+    padding-right: 40px !important;
+}
+
+.custom-select option {
+    background-color: #1a1b20;
+    color: var(--text-primary);
 }
 
 .form-input.custom-select:focus ~ .form-label,
@@ -1494,8 +1532,40 @@ textarea ~ .form-label {
     font-size: 0.75rem;
     font-weight: 600;
     color: var(--primary);
-    background-color: var(--bg-surface);
+    background-color: #1a1b20;
     padding: 0 8px;
+}
+
+/* Submit and Reset Button Overrides */
+.submit-btn {
+    width: 100%;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.reset-btn {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 10px 24px;
+    border-radius: 100px;
+    background-color: transparent;
+    border: 1px solid var(--text-dimmed);
+    color: var(--primary);
+    cursor: pointer;
+    transition: var(--transition-medium);
+    margin-top: 10px;
+}
+
+.reset-btn:hover {
+    background-color: rgba(173, 198, 255, 0.08);
+    border-color: var(--primary);
 }
 
 /* Form success overlay styling */
@@ -1505,7 +1575,7 @@ textarea ~ .form-label {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--bg-surface);
+    background-color: #1a1b20;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1525,9 +1595,9 @@ textarea ~ .form-label {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 16px;
     max-width: 360px;
-    padding: 20px;
+    padding: 32px;
 }
 
 .success-icon-wrapper {
@@ -2044,6 +2114,20 @@ textarea ~ .form-label {
         align-items: center;
     }
     
+    .visual-card {
+        height: 380px;
+    }
+    
+    .card-glass {
+        padding: 20px;
+        gap: 12px;
+    }
+    
+    .card-content-visual {
+        font-size: 0.72rem;
+        line-height: 1.5;
+    }
+    
     .skills-tabs {
         border-radius: var(--border-radius-md);
         padding: 10px;
@@ -2060,4 +2144,162 @@ textarea ~ .form-label {
     .contact-wrapper {
         padding: 24px;
     }
+    
+    .modal-scroll-container {
+        padding: 16px !important;
+    }
+    
+    .modal-header {
+        margin-bottom: 16px;
+    }
+}
+
+/* Loading spinner animation */
+.spinner-inline {
+    border: 2px solid rgba(18, 19, 24, 0.2);
+    border-top: 2px solid #121318;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 8px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Container sections containing background elements */
+.services-section,
+.skills-section,
+.projects-section,
+.testimonials-section,
+.contact-section {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Generic Background Blob Styles */
+.section-bg-blob {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    width: 320px;
+    height: 320px;
+}
+
+.blob-rotator {
+    width: 100%;
+    height: 100%;
+    transform-origin: center center;
+}
+
+.blob-rotator svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 30px rgba(173, 198, 255, 0.1));
+}
+
+/* Individual blob settings for variety */
+.hero-blob {
+    top: 5%;
+    left: -120px;
+    opacity: 0.22; /* Increased visibility */
+    animation: blobFloatHero 16s ease-in-out infinite alternate;
+}
+.hero-blob .blob-rotator {
+    animation: blobRotate 28s linear infinite;
+}
+
+.services-blob {
+    top: 25%;
+    right: -120px;
+    opacity: 0.18; /* Increased visibility */
+    animation: blobFloatServices 20s ease-in-out infinite alternate;
+}
+.services-blob .blob-rotator {
+    animation: blobRotateReverse 32s linear infinite;
+}
+
+.skills-blob {
+    bottom: 8%;
+    left: -140px;
+    opacity: 0.18; /* Increased visibility */
+    animation: blobFloatSkills 18s ease-in-out infinite alternate;
+}
+.skills-blob .blob-rotator {
+    animation: blobRotate 25s linear infinite;
+}
+
+.projects-blob {
+    top: 15%;
+    right: -130px;
+    opacity: 0.2; /* Increased visibility */
+    animation: blobFloatProjects 22s ease-in-out infinite alternate;
+}
+.projects-blob .blob-rotator {
+    animation: blobRotateReverse 35s linear infinite;
+}
+
+.testimonials-blob {
+    bottom: 5%;
+    left: -120px;
+    opacity: 0.18; /* Increased visibility */
+    animation: blobFloatTestimonials 21s ease-in-out infinite alternate;
+}
+.testimonials-blob .blob-rotator {
+    animation: blobRotate 29s linear infinite;
+}
+
+@keyframes blobRotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes blobRotateReverse {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
+}
+
+@keyframes blobFloatHero {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(50px, -30px) scale(1.05); }
+    100% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+@keyframes blobFloatServices {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-40px, 50px) scale(0.95); }
+    100% { transform: translate(30px, -20px) scale(1.02); }
+}
+
+@keyframes blobFloatSkills {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(55px, 30px) scale(1.03); }
+    100% { transform: translate(-15px, -40px) scale(0.95); }
+}
+
+@keyframes blobFloatProjects {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(-30px, -50px) scale(1.05); }
+    100% { transform: translate(40px, 20px) scale(0.98); }
+}
+
+@keyframes blobFloatTestimonials {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(40px, -40px) scale(0.97); }
+    100% { transform: translate(-50px, 30px) scale(1.03); }
+}
+
+/* Enable glassmorphic backdrop filter blur on all card containers */
+.service-card,
+.project-card,
+.testimonial-card,
+.skills-grid-bars,
+.contact-form-container {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
 }

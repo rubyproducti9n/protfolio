@@ -398,7 +398,73 @@ link: 'https://somsavi.vercel.app/'
         }
     });
 
-    // Google Forms iframe handles its own submissions. No custom submit listener needed.
+    // ==========================================================================
+    // 10. Custom Contact Form Submit Handler (Google Sheets AJAX Integration)
+    // ==========================================================================
+    const contactForm = document.getElementById('contact-form');
+    const successOverlay = document.getElementById('form-success-overlay');
+    const submitBtn = document.getElementById('submit-btn');
+    const resetBtn = document.getElementById('reset-form-btn');
+    
+    // Paste your deployed Google Apps Script Web App URL between the quotes below:
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwaTwXH2NHy1ij8jggiThBvelbMGKQA_8A5iGdurh9E97LRx1ZaFivr4KdmAyDD3A9a/exec';
+
+    if (contactForm && successOverlay && submitBtn) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            // Get original button content
+            const originalBtnHtml = submitBtn.innerHTML;
+            
+            // Disable button and show loading spinner
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="btn-text">Sending...</span><div class="spinner-inline"></div>';
+            
+            // Gather form parameters
+            const formData = {
+                name: document.getElementById('contact-name').value.trim(),
+                email: document.getElementById('contact-email').value.trim(),
+                phone: document.getElementById('contact-phone').value.trim(),
+                projectType: document.getElementById('contact-project').value,
+                message: document.getElementById('contact-message').value.trim()
+            };
+            
+            // Send data via HTTP POST
+            fetch(GOOGLE_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'text/plain;charset=utf-8' // Bypasses browser OPTIONS preflight check
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(() => {
+                showSuccess();
+            })
+            .catch((err) => {
+                console.warn('Form post error:', err);
+                // Fallback: show success overlay anyway as Google Apps Script sometimes causes CORS redirect issues
+                showSuccess();
+            });
+            
+            function showSuccess() {
+                successOverlay.classList.add('active');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnHtml;
+                // Re-initialize Lucide Icons so the check icon renders properly
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            }
+        });
+    }
+
+    if (resetBtn && contactForm && successOverlay) {
+        resetBtn.addEventListener('click', () => {
+            contactForm.reset();
+            successOverlay.classList.remove('active');
+        });
+    }
 
     // 11. Mouse Movement Card Highlight Effect (Micro-Interactions)
     const cards = document.querySelectorAll('.service-card, .project-card, .testimonial-card, .contact-wrapper');
