@@ -387,6 +387,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = projectsData[projectId];
         if (!data) return;
 
+        // Intercept Video Editing category projects to open the Cinematic Showcase
+        if (data.category && (data.category.toLowerCase().includes('video') || data.showcaseVideos)) {
+            openVideoShowcase(data);
+            return;
+        }
+
         // Populate details
         modalCat.textContent = data.category;
         modalTitle.textContent = data.title;
@@ -448,6 +454,269 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = ''; // Unlock scroll
     };
+
+    // Video Showcase Modal Controls
+    const videoModal = document.getElementById('video-showcase-modal');
+    const videoModalClose = document.getElementById('video-modal-close');
+    const videoModalBackdrop = document.getElementById('video-modal-backdrop');
+    const videoPlayerWrapper = document.getElementById('video-player-wrapper');
+    const videoPlayer = document.getElementById('showcase-video-player');
+    const videoIframe = document.getElementById('showcase-iframe-player');
+    const videoTitle = document.getElementById('video-showcase-title');
+    const videoDesc = document.getElementById('video-showcase-desc');
+    const videoTags = document.getElementById('video-showcase-tags');
+    const videoPlaylist = document.getElementById('video-playlist');
+    const videoAmbient = document.getElementById('video-ambient-glow');
+
+    let activeVideos = [];
+    let activeVideoIndex = 0;
+
+    const openVideoShowcase = (projectData) => {
+        // Collect videos or fallback
+        activeVideos = Array.isArray(projectData.showcaseVideos) && projectData.showcaseVideos.length > 0
+            ? projectData.showcaseVideos
+            : [
+                {
+                    title: "Cinematic Travel Film - Widescreen (16:9)",
+                    aspect: "16/9",
+                    type: "youtube",
+                    src: "https://www.youtube.com/embed/ScMzIvxBSi4",
+                    desc: "A cinematic travel video edited with speed ramps, smooth camera transitions, and multi-layered nature ambient sound design.",
+                    tags: ["DaVinci Resolve", "Color Grading", "Sound FX"],
+                    glowColor: "rgba(173, 198, 255, 0.2)"
+                },
+                {
+                    title: "Commercial Social Ad - Vertical Reel (9:16)",
+                    aspect: "9/16",
+                    type: "youtube",
+                    src: "https://www.youtube.com/embed/ScMzIvxBSi4",
+                    desc: "High-energy vertical ad optimized for social feeds, featuring rapid-fire visual edits, kinetic text overlays, and punchy transitions.",
+                    tags: ["After Effects", "Premiere Pro", "Kinetic Typography"],
+                    glowColor: "rgba(229, 186, 216, 0.2)"
+                },
+                {
+                    title: "Documentary Narrative - Cinematic (21:9)",
+                    aspect: "21/9",
+                    type: "youtube",
+                    src: "https://www.youtube.com/embed/3JZ_D3K155I",
+                    desc: "Anamorphic widescreen edit focusing on interview audio leveling, low-key lighting grading, and smooth documentary pacing.",
+                    tags: ["Premiere Pro", "Audio Pacing", "Color Correction"],
+                    glowColor: "rgba(162, 198, 220, 0.2)"
+                },
+                {
+                    title: "Motion Graphics Promo - Square (1:1)",
+                    aspect: "1/1",
+                    type: "direct",
+                    src: "https://assets.mixkit.co/videos/preview/mixkit-stars-in-space-background-1611-large.mp4",
+                    desc: "A social post promo piece utilizing a 1:1 ratio, animated vector shapes, and tracking elements styled for corporate brand campaigns.",
+                    tags: ["After Effects", "Illustrator", "Motion Tracking"],
+                    glowColor: "rgba(194, 198, 220, 0.2)"
+                }
+            ];
+
+        activeVideoIndex = 0;
+        
+        // Render Playlist
+        renderVideoPlaylist();
+        
+        // Load initial video
+        loadShowcaseVideo(0);
+
+        // Open Modal
+        if (videoModal) {
+            videoModal.classList.add('active');
+            videoModal.setAttribute('aria-hidden', 'false');
+        }
+        document.body.style.overflow = 'hidden'; // Lock scrolling
+    };
+
+    const renderVideoPlaylist = () => {
+        if (!videoPlaylist) return;
+        videoPlaylist.innerHTML = '';
+        activeVideos.forEach((video, idx) => {
+            const item = document.createElement('div');
+            item.className = `video-list-item${idx === activeVideoIndex ? ' active' : ''}`;
+            item.setAttribute('data-index', idx);
+            
+            // Map aspect labels for readable badge text
+            let readableAspect = 'Widescreen';
+            if (video.aspect === '9/16') readableAspect = 'Reel/Short';
+            if (video.aspect === '1/1') readableAspect = 'Square';
+            if (video.aspect === '21/9') readableAspect = 'Cinematic';
+
+            item.innerHTML = `
+                <div class="playlist-thumb">
+                    <i data-lucide="play"></i>
+                </div>
+                <div class="playlist-info">
+                    <h4 class="playlist-video-title">${video.title}</h4>
+                    <div class="playlist-video-meta">
+                        <span class="playlist-video-aspect">${readableAspect}</span>
+                    </div>
+                </div>
+            `;
+            
+            item.addEventListener('click', () => {
+                loadShowcaseVideo(idx);
+            });
+            
+            videoPlaylist.appendChild(item);
+        });
+
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons({
+                attrs: {
+                    style: 'width: 16px; height: 16px;'
+                }
+            });
+        }
+    };
+
+    const loadShowcaseVideo = (idx) => {
+        activeVideoIndex = idx;
+        
+        // Update active class in playlist list
+        if (videoPlaylist) {
+            const items = videoPlaylist.querySelectorAll('.video-list-item');
+            items.forEach((item, itemIdx) => {
+                if (itemIdx === idx) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+
+        const video = activeVideos[idx];
+        if (!video) return;
+
+        // Reset players to prevent playing background audio
+        if (videoPlayer) {
+            videoPlayer.pause();
+            videoPlayer.src = '';
+            videoPlayer.classList.remove('active');
+        }
+        
+        if (videoIframe) {
+            videoIframe.src = '';
+            videoIframe.classList.remove('active');
+        }
+
+        // Update Metadata
+        if (videoTitle) videoTitle.textContent = video.title;
+        if (videoDesc) videoDesc.textContent = video.desc || '';
+        
+        // Update tags
+        if (videoTags) {
+            videoTags.innerHTML = '';
+            if (Array.isArray(video.tags)) {
+                video.tags.forEach(tag => {
+                    const span = document.createElement('span');
+                    span.className = 'tag';
+                    span.textContent = tag;
+                    videoTags.appendChild(span);
+                });
+            }
+        }
+
+        // Setup Aspect Ratio and Sizing Variables on player wrapper
+        if (videoPlayerWrapper) {
+            const currentAspect = video.aspect || '16/9';
+            videoPlayerWrapper.style.setProperty('--current-aspect', currentAspect);
+            videoPlayerWrapper.style.setProperty('--player-max-width', `min(100%, calc(55vh * ${currentAspect}))`);
+        }
+
+        // Update ambient glow color dynamically
+        if (videoAmbient) {
+            const currentAspect = video.aspect || '16/9';
+            let glowColor = video.glowColor;
+            if (!glowColor) {
+                // Predict beautiful fallback colors
+                if (currentAspect === '9/16') glowColor = 'rgba(229, 186, 216, 0.22)'; // Soft magenta glow
+                else if (currentAspect === '21/9') glowColor = 'rgba(162, 198, 220, 0.22)'; // Slate blue/teal glow
+                else if (currentAspect === '1/1') glowColor = 'rgba(194, 198, 220, 0.22)'; // Lavender purple glow
+                else glowColor = 'rgba(173, 198, 255, 0.22)'; // Soft blue glow
+            }
+            videoAmbient.style.setProperty('--ambient-glow', glowColor);
+        }
+
+        // Load Source
+        if (video.type === 'youtube') {
+            if (videoIframe) {
+                videoIframe.classList.add('active');
+                // Check if URL has query params
+                const separator = video.src.includes('?') ? '&' : '?';
+                videoIframe.src = `${video.src}${separator}autoplay=1&rel=0&modestbranding=1&enablejsapi=1`;
+            }
+        } else {
+            if (videoPlayer) {
+                videoPlayer.classList.add('active');
+                videoPlayer.src = video.src;
+                videoPlayer.load();
+                videoPlayer.play().catch(err => {
+                    console.log('[Portfolio] Autoplay blocked by browser. User interaction needed.');
+                });
+            }
+        }
+    };
+
+    const closeVideoShowcase = () => {
+        // Halt media playing
+        if (videoPlayer) {
+            videoPlayer.pause();
+            videoPlayer.src = '';
+        }
+        if (videoIframe) {
+            videoIframe.src = '';
+        }
+
+        if (videoModal) {
+            videoModal.classList.remove('active');
+            videoModal.setAttribute('aria-hidden', 'true');
+        }
+        document.body.style.overflow = ''; // Restore page scrolling
+    };
+
+    // Wire up Close hooks for video modal
+    if (videoModalClose) videoModalClose.addEventListener('click', closeVideoShowcase);
+    if (videoModalBackdrop) videoModalBackdrop.addEventListener('click', closeVideoShowcase);
+
+    // Keyboard Shortcuts inside Video Showcase
+    document.addEventListener('keydown', (e) => {
+        if (!videoModal || !videoModal.classList.contains('active')) return;
+
+        if (e.key === 'Escape') {
+            closeVideoShowcase();
+        } else if (e.key === 'ArrowRight') {
+            // Next video
+            const nextIdx = (activeVideoIndex + 1) % activeVideos.length;
+            loadShowcaseVideo(nextIdx);
+            // Scroll playlist item into view
+            if (videoPlaylist) {
+                const activeItem = videoPlaylist.querySelector(`.video-list-item[data-index="${nextIdx}"]`);
+                if (activeItem) activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        } else if (e.key === 'ArrowLeft') {
+            // Previous video
+            const prevIdx = (activeVideoIndex - 1 + activeVideos.length) % activeVideos.length;
+            loadShowcaseVideo(prevIdx);
+            // Scroll playlist item into view
+            if (videoPlaylist) {
+                const activeItem = videoPlaylist.querySelector(`.video-list-item[data-index="${prevIdx}"]`);
+                if (activeItem) activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        } else if (e.key === ' ' && activeVideos[activeVideoIndex]?.type === 'direct') {
+            // Toggle play/pause direct video element
+            e.preventDefault(); // Stop page scrolling from space
+            if (videoPlayer) {
+                if (videoPlayer.paused) {
+                    videoPlayer.play().catch(() => {});
+                } else {
+                    videoPlayer.pause();
+                }
+            }
+        }
+    });
 
     // Attach click events to project cards using event delegation on projects-grid container
     const projectsGrid = document.getElementById('projects-grid');

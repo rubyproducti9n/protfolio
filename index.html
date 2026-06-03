@@ -99,9 +99,9 @@
                 </h1>
 
                 <p class="hero-subtitle fade-in">
-                    I am a multi-disciplinary creator specialized in building elite
-                    <span class="highlight-text" id="typewriter">Android Apps</span>,
-                    responsive websites, high-impact video edits, and SEO engines that drive explosive growth.
+                    I am a multi-disciplinary creator specialized in building responsive websites,
+                    high-impact video edits, and SEO engines that drive explosive growth.
+                    I design and engineer elite <span class="highlight-text" id="typewriter">Android Apps</span>.
                 </p>
 
                 <div class="hero-cta fade-in">
@@ -831,6 +831,55 @@
                         
                         <h4 style="color: #fff; margin-top: 10px;">5. Delays & Cancellation</h4>
                         <p>If the client fails to provide necessary assets, copy, or feedback for more than 14 consecutive days, the project will be placed on hold. Cancellations mid-project forfeit the deposit, and the client will be billed for work completed beyond the deposit value.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Cinematic Video Showcase Modal -->
+    <div class="video-showcase-modal" id="video-showcase-modal" aria-hidden="true">
+        <div class="video-modal-backdrop" id="video-modal-backdrop"></div>
+        <div class="video-modal-wrapper">
+            <div class="video-modal-content">
+                <button class="video-modal-close" id="video-modal-close" aria-label="Close Video Showcase">
+                    <i data-lucide="x"></i>
+                </button>
+                <div class="video-modal-grid">
+                    <!-- Left Section: Player & Ambient Glow & Metadata -->
+                    <div class="video-viewport-panel">
+                        <div class="video-ambient-glow" id="video-ambient-glow"></div>
+                        <div class="video-player-wrapper" id="video-player-wrapper">
+                            <!-- Direct Video player -->
+                            <video id="showcase-video-player" class="showcase-video" controls playsinline>
+                                <source src="" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <!-- YouTube Frame player -->
+                            <iframe id="showcase-iframe-player" class="showcase-iframe" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                        </div>
+                        <div class="video-meta-content">
+                            <h2 class="video-showcase-title" id="video-showcase-title">Video Title</h2>
+                            <p class="video-showcase-desc" id="video-showcase-desc">Detailed descriptions of editing style and techniques go here.</p>
+                            <div class="video-showcase-tags" id="video-showcase-tags">
+                                <!-- Populated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Right Section: Video Selection Playlist & Credits -->
+                    <div class="video-sidebar-panel">
+                        <div class="sidebar-header">
+                            <span class="sidebar-subtitle">Selected Edits Portfolio</span>
+                            <h3 class="sidebar-title">Showcase Playlist</h3>
+                        </div>
+                        <div class="video-playlist" id="video-playlist">
+                            <!-- Loaded dynamically via script.js -->
+                        </div>
+                        <div class="video-sidebar-footer">
+                            <div class="video-footer-accent">
+                                <i data-lucide="film" class="accent-icon"></i>
+                                <span>Edits, pacing, soundscapes, and color grading by Om Lokhande.</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

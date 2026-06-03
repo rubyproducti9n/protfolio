@@ -49,6 +49,53 @@
     "comingSoon": false
   },
   {
+    "id": "3",
+    "category": "Video Editing",
+    "title": "Video Edits",
+    "img": "assets/video-editing.png",
+    "summary": "A showcase of cinematic video edits, promotional clips, and high-impact motion graphics.",
+    "desc": "Explore a curated gallery of my video editing and motion graphics projects, ranging from cinematic widescreen reels to vertical social media edits (9:16 Shorts/Reels). Feel the pacing, audio design, and precision cuts.",
+    "accomplishments": [
+      "Edited high-impact social media videos, YouTube series, and corporate reels.",
+      "Used Premiere Pro, After Effects, and DaVinci Resolve to deliver slick transitions, VFX, and audio design.",
+      "Optimized export formats for high quality and smooth online streaming."
+    ],
+    "tags": [
+      "Premiere Pro",
+      "After Effects",
+      "Color Grading",
+      "Sound Design"
+    ],
+    "testimonial": "The video editing is top-notch, highly creative transitions and timing are absolutely perfect.",
+    "author": "Client",
+    "link": "#",
+    "comingSoon": false,
+    "showcaseVideos": [
+      {
+        "title": "Naming Ceremony Reel/Shorts",
+        "aspect": "16/9",
+        "type": "youtube",
+        "src": "https://drive.google.com/file/d/1JuMBd0Ik4nt04DgsWtcXRyE55dZVfMVm/preview",
+        "desc": "N/A",
+        "tags": [
+          "Premiere Pro",
+          "Color Graded"
+        ]
+      },
+      {
+        "title": "Dohali Program Reel/Shorts",
+        "aspect": "16/9",
+        "type": "youtube",
+        "src": "https://drive.google.com/file/d/1EUfC9iDrTSAlUIAdiJz9Kk4rc8Lm6LcE/preview",
+        "desc": "N/A",
+        "tags": [
+          "Premiere Pro",
+          "Color Graded"
+        ]
+      }
+    ]
+  },
+  {
     "id": "1",
     "category": "Android App",
     "title": "Demo Android App",
@@ -70,29 +117,6 @@
     "testimonial": "The AuraFit app is incredibly polished. The Jetpack Compose UI flows naturally and the TensorFlow pose tracking operates locally and efficiently. Alex is an elite Android developer.",
     "author": "Sarah Jenkins, Product Lead at FitTech Systems",
     "link": "https://github.com/alexcarter/aurafit-android",
-    "comingSoon": true
-  },
-  {
-    "id": "3",
-    "category": "Video Editing",
-    "title": "Video Edits",
-    "img": "assets/video-editing.png",
-    "summary": "A showcase of cinematic video edits, promotional clips, and high-impact motion graphics.",
-    "desc": "A showcase of cinematic video edits, promotional clips, and high-impact motion graphics for platforms like YouTube, Instagram Reels, and corporate portfolios.",
-    "accomplishments": [
-      "Edited high-impact social media videos, YouTube series, and corporate reels.",
-      "Used Premiere Pro, After Effects, and DaVinci Resolve to deliver slick transitions, VFX, and audio design.",
-      "Optimized export formats for high quality and smooth online streaming."
-    ],
-    "tags": [
-      "Premiere Pro",
-      "After Effects",
-      "Color Grading",
-      "Sound Design"
-    ],
-    "testimonial": "The video editing is top-notch, highly creative transitions and timing are absolutely perfect.",
-    "author": "Client",
-    "link": "#",
     "comingSoon": true
   }
 ]
