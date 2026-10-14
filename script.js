@@ -96,7 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
             ],
             stack: ["Next.js / React", "TypeScript", "PaceHR", "Gehrimed", "FastAPI / Node.js", "Healthcare Workflows", "Data Security", "Real-Time Sync"],
             impactMetric: "Zero Latency",
-            deliveryMetric: "100% HIPAA Ready"
+            deliveryMetric: "100% HIPAA Ready",
+            img: "assets/ehr.png",
+            link: "https://ehr-system-smoky-pi.vercel.app/"
         },
         "3": {
             title: "Unofficial Mech",
@@ -113,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
             stack: ["Kotlin", "Java", "Jetpack Compose", "MVVM Architecture", "AI SDK", "Google Play Billing", "Firebase Crashlytics", "Android Vitals"],
             impactMetric: "Google Play Live",
             deliveryMetric: "99.9% Crash-Free",
+            img: "https://play-lh.googleusercontent.com/910ikobveWOwcvvv-RH4Rjrp4chu5bycE__LF8fSfqOjcLkYD2jdibfmR-yUk9In_2c=w480-h960-rw",
             link: "https://play.google.com/store/apps/details?id=com.rubyproducti9n.unofficialmech"
         }
     };
@@ -184,8 +187,36 @@ document.addEventListener('DOMContentLoaded', () => {
                         stack: (p.tags && p.tags.length) ? p.tags : (caseStudiesData[p.id]?.stack || []),
                         impactMetric: p.comingSoon ? "In-Development" : "Live in Production",
                         deliveryMetric: p.comingSoon ? "In-Development" : "Production",
-                        link: (p.link && p.link !== '#') ? p.link : (caseStudiesData[p.id]?.link || null)
+                        link: (p.link && p.link !== '#') ? p.link : (caseStudiesData[p.id]?.link || null),
+                        img: p.img || (caseStudiesData[p.id]?.img || null)
                     };
+
+                    // Dynamically update card screenshot image in the DOM
+                    if (p.img) {
+                        const imgEl = document.querySelector(`[data-project-img="${p.id}"]`) ||
+                                      document.querySelector(`[data-project-card="${p.id}"] img`);
+                        if (imgEl && imgEl.getAttribute('src') !== p.img) {
+                            imgEl.src = p.img;
+                        }
+                    }
+
+                    // Dynamically update card title in the DOM
+                    if (p.title) {
+                        const titleEl = document.querySelector(`[data-project-title="${p.id}"]`);
+                        if (titleEl) titleEl.textContent = p.title;
+                    }
+
+                    // Dynamically update card category in the DOM
+                    if (p.category) {
+                        const catEl = document.querySelector(`[data-project-category="${p.id}"]`);
+                        if (catEl) catEl.textContent = p.category;
+                    }
+
+                    // Dynamically update card metric in the DOM
+                    if (p.summary) {
+                        const metricEl = document.querySelector(`[data-project-metric="${p.id}"]`);
+                        if (metricEl) metricEl.textContent = p.summary;
+                    }
                 }
             });
             updateProjectActionButtons();
@@ -210,8 +241,21 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             // Gracefully use the built-in caseStudiesData if running purely offline
         }
+
+        // Return applyData for external callers (e.g. storage event)
+        return applyData;
     };
     syncProjectsWithBackend();
+
+    // Listen for live updates made in the admin panel tab (cross-tab real-time sync)
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'portfolio_admin_projects' && e.newValue) {
+            try {
+                const updated = JSON.parse(e.newValue);
+                syncProjectsWithBackend();
+            } catch(err) {}
+        }
+    });
 
     const openProjectModal = (projectId) => {
         const data = caseStudiesData[projectId];
