@@ -3,7 +3,7 @@
     "id": "2",
     "category": "Enterprise Healthcare Architecture",
     "title": "EHR Healthcare Workflow Management System",
-    "img": "assets/aurafit.png",
+    "img": "assets/ehr.png",
     "summary": "Built robust, secure electronic health record operations and structured data handling to eliminate manual latencies for clinical documentation.",
     "desc": "A secure clinical operations platform designed to eliminate manual data entry latency for hospital and clinical staff. Orchestrates complex multi-provider workflows, patient intake schemas, and medical record interoperability, serving as the central hub for companion mobile clients.",
     "accomplishments": [
@@ -24,7 +24,7 @@
     ],
     "testimonial": "The streamlined record management workflows significantly curtailed doctor intake administrative delays while maintaining structural precision.",
     "author": "Clinical Operations Lead",
-    "link": "#",
+    "link": "https://ehr-system-smoky-pi.vercel.app/",
     "comingSoon": false
   },
   {
