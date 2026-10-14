@@ -5,7 +5,13 @@ node_modules/
 admin.html
 admin.js
 admin.css
+email-templates.html
+email-templates.json
 server.js
+server.py
+__pycache__/
 package.json
 package-lock.json
 run-admin.bat
+launch.bat
+*.bat
