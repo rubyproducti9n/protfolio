@@ -1,34 +1,5 @@
 [
   {
-    "id": "1",
-    "category": "Native Android & Healthcare Systems",
-    "title": "EHR System Connect Android App (In-Development)",
-    "img": "assets/apexcloud.png",
-    "summary": "Native Android companion app bridging mobile clinicians with the centralized EHR Healthcare Web System for real-time bedside charting.",
-    "desc": "Currently in active development, this native Android mobile application establishes a high-security mobile companion to the EHR Healthcare Web System. Engineered with Jetpack Compose and offline-first Room database synchronization, allowing healthcare providers to access patient vitals, review orders, and update clinical documentation directly from point-of-care.",
-    "accomplishments": [
-      "Engineered native Android architecture using Kotlin and Jetpack Compose, connecting directly via secure WebSocket and REST gateways to the EHR Web platform.",
-      "Designed offline-first local caching using Room database with automatic conflict resolution upon reconnection.",
-      "Implemented biometric hardware authentication (Fingerprint / Face Unlock) enforcing strict patient data access controls.",
-      "Integrated low-latency push notifications via Firebase Cloud Messaging (FCM) for urgent physician alerts and critical lab updates."
-    ],
-    "tags": [
-      "Kotlin",
-      "Jetpack Compose",
-      "MVVM Clean Architecture",
-      "EHR Connect",
-      "Biometrics",
-      "Room DB",
-      "FCM",
-      "REST APIs",
-      "In-Development"
-    ],
-    "testimonial": "Active mobile companion client engineered for bedside clinical productivity and continuous EHR system synchronization.",
-    "author": "Clinical Engineering Architecture",
-    "link": "#",
-    "comingSoon": true
-  },
-  {
     "id": "2",
     "category": "Enterprise Healthcare Architecture",
     "title": "EHR Healthcare Workflow Management System",
@@ -38,7 +9,7 @@
     "accomplishments": [
       "Eliminated manual latencies for clinical documentation by engineering structured data entry pipelines and automated schema validation.",
       "Handled complex healthcare workflows integrating with industry platform frameworks like PaceHR and Gehrimed.",
-      "Architected central backend APIs and real-time state synchronization powering both web portals and the EHR System Connect Android application.",
+      "Architected central backend APIs and real-time state synchronization powering web portals and companion client applications.",
       "Implemented strict access control and real-time state synchronization for patient scheduling, prescriptions, and lab records."
     ],
     "tags": [

@@ -82,22 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 5. Case Studies Deep Dive Modal Data
     const caseStudiesData = {
-        "1": {
-            title: "EHR System Connect Android App",
-            subtitle: "Native Android Mobile Companion (In-Development)",
-            category: "Native Android & Healthcare Systems",
-            metric: "Targeting 40% reduction in clinician bedside charting latency with secure biometric authentication.",
-            description: "Currently in active development, this native Android mobile application establishes a high-security mobile companion node to the EHR Healthcare Web System. Engineered with Jetpack Compose and offline-first Room database synchronization, allowing healthcare providers to access patient vitals, review orders, and update clinical documentation directly from bedside.",
-            details: [
-                "Engineered native Android architecture using Kotlin and Jetpack Compose, connecting directly via secure WebSocket & REST gateways to the EHR Web platform.",
-                "Designed offline-first local caching using Room database with automatic conflict resolution upon hospital Wi-Fi reconnection.",
-                "Implemented biometric hardware authentication (Fingerprint / Face Unlock) enforcing HIPAA-compliant patient data access controls.",
-                "Integrated low-latency push notifications via Firebase Cloud Messaging (FCM) for critical diagnostic lab results and urgent physician alerts."
-            ],
-            stack: ["Kotlin", "Jetpack Compose", "MVVM Clean Architecture", "EHR Connect", "Biometrics", "Room DB", "FCM", "REST APIs", "In-Development"],
-            impactMetric: "40% Charting Speed",
-            deliveryMetric: "In-Development"
-        },
         "2": {
             title: "EHR Healthcare Workflow Management System",
             subtitle: "Centralized Clinical Operations Platform",
@@ -108,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 "Interfaced directly with standard clinical platforms including PaceHR and Gehrimed for synchronized patient documentation.",
                 "Streamlined clinical intake and doctor note compilation, eliminating administrative overhead and reducing clerical burnout.",
                 "Constructed high-security schema validation layers enforcing patient data integrity and audit-ready data persistence.",
-                "Architected central backend APIs and real-time state synchronization powering both web portals and the EHR System Connect Android application."
+                "Architected central backend APIs and real-time state synchronization powering web portals and companion client applications."
             ],
             stack: ["Next.js / React", "TypeScript", "PaceHR", "Gehrimed", "FastAPI / Node.js", "Healthcare Workflows", "Data Security", "Real-Time Sync"],
             impactMetric: "Zero Latency",
